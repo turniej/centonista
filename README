@@ -1,0 +1,70 @@
+Na paczkę z programem centonista składają się następujące pliki:
+
+  * README -- właśnie go czytasz.
+  * AUTHORS -- informacja o autorach programu.
+  * COPYING -- licencja rozpowszechniania programu, czyli GNU Affero.
+  * Makefile -- plik dla narzędzia make.
+  * szablony.d -- szablony wierszy pisanych przez program. Komentarz
+    na początku pliku 'szablony.d' wyjaśnia zasady ich tworzenia.
+  * przygotuj_mi.py -- program pomocniczy, przygotowujący dane dla
+    zasadniczego programu napisz_mi.
+  * napisz_mi.cc -- kod źródłowy programu napisz_mi.
+
+Aby stworzyć plik wykonywalny napisz_mi oraz pliki niezbędne do jego
+działania, należy wydać polecenie 'make'. Najpierw jednak przeczytaj
+następny akapit. Wymienia on biblioteki, których instalacja jest niezbędna
+przed wydaniem tego polecenia.
+
+Program przygotuj_mi.py wymaga, by było dostępne locale pl_PL.ISO-8859-2
+(nie musi ono być bieżącym locale; wystarczy, że jest dostępne).
+W systemie Linux do jego ewentualnej instalacji powinno wystarczyć wydanie
+polecenia 'sudo locale-gen pl_PL'. Ponadto wymaga on, by były zainstalowane:
+
+ * Python 2.6, przy czym Python 2.5 też by działał, gdyby nie irytujący
+   wyjątek przy dekodowaniu znaku 'ą' z UTF-8.
+ * PyYAML: http://pyyaml.org/
+ * NLTK: http://www.nltk.org/
+
+Program uruchamiamy, wydając polecenie
+'./przygotuj_mi.py <opcjonalny URL paczki ZIP z tekstami>'. Jeśli paczka
+leży w systemie plików, należy przed jej ścieżką dodać ciąg znaków 'file:',
+np. './przygotuj_mi.py file:/tmp/moje-teksty.zip'. Jeśli nie podamy URL-a,
+program ściągnie z serwisu wolnelektury.pl paczkę ze wszystkimi utworami.
+
+Jeśli program przetwarza wszystkie utwory, to powinien zakończyć działanie
+po kilku minutach (powiedzmy między 4' a 8'), zużywając od około 800 do około
+1200 megabajtów pamięci operacyjnej. Zapotrzebowanie na zasoby obliczeniowe
+odpowiednio maleje, jeśli przetwarzana paczka jest mniejsza. Program tworzy
+trzy pliki o nazwach 'model.d', 'rymy.d' i 'zestroje.d', używane następnie
+przez program napisz_mi.
+
+Program napisz_mi wymaga, by w katalogu bieżącym znajdowały się pliki
+'model.d', 'rymy.d', 'zestroje.d' i 'szablony.d'. Jeśli uruchomimy go bez
+argumentów, to napisze dla nas wiersz-centon. Każdy napisany centon jest
+opatrzony tytułem, zawierającym jego dwunastoznakowy kod.
+
+Rozpoznawane argumenty wywołania programu to:
+'./napisz_mi \
+    <liczba powtórzeń szablonu wiersza, poprzedzona znakiem minus> \
+    <dwunastoznakowy kod wiersza, który chcemy wygenerować>'
+Oba z nich są opcjonalne. Liczba powtórzeń szablonu po usunięciu sprzed niej
+znaku minus musi być dodatnia.
+
+Program napisz_mi łatwo rozbudować tak, by móc za pomocą argumentów
+wywołania wybierać schemat wiersza lub rymy, których ma w nim użyć.
+Autor nie zrobił tego z powodu nawału innych zajęć.
+
+Autorowi udało się uruchomić program centonista w systemie Linux i Mac OS X.
+
+Autor jest świadom istnienia dwóch błędów w działaniu programu. Oba z nich
+wiążą się z rymami:
+
+  * Wiersze pisane przez program zasadniczo nie powinny zawierać banalnych
+    rymów. Wyjątek zachodzi, gdy jeden z rymujących się wyrazów powstaje
+    z drugiego przez dodanie przedrostka (zobacz tablicę kPrefixes w pliku
+    napisz_mi.cc), a początkowe litery drugiego też pasują do jakiegoś
+    przedrostka. Takie wyrazy to na przykład 'niedobry' i 'dobry'.
+
+  * Rymy w pisanych wierszach nie powinny się powtarzać, jeśli w odpowiednim
+    szablonie oznaczają je różne litery. Z przyczyn niezrozumiałych dla
+    autora czasem jednak tak się dzieje.
